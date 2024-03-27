@@ -20,14 +20,14 @@ stages:
         workingDirectory: $(WorkingDirectory)
         arguments: validate
       env: 
-        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-        ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+        ARM_CLIENT_ID: $(kv-infra-client-id)
+        ARM_CLIENT_SECRET: $(kv-infra-client-secret)
+        ARM_TENANT_ID: $(kv-infra-tenant-id)
+        ARM_SUBSCRIPTION_ID: $(kv-infra-sub-id)
         BACKEND_RESOURCE_GROUP_NAME: $(BACKEND_RESOURCE_GROUP_NAME)
         BACKEND_STORAGE_ACCOUNT_NAME: $(BACKEND_STORAGE_ACCOUNT_NAME)
         BACKEND_STORAGE_CONTAINER_NAME: $(BACKEND_STORAGE_CONTAINER_NAME)
-        TF_BACKEND_KEY: $(ApplicationName)-$(EnvironmentName)
+        TF_BACKEND_KEY: $(ApplicationName)
         TF_VAR_application_name: $(ApplicationName)
 
     - task: Bash@3
@@ -35,20 +35,20 @@ stages:
       inputs:
         filePath: .azdo-pipelines/scripts/terraform-with-backend.sh
         workingDirectory: $(WorkingDirectory)
-        arguments: plan -var-file="env-$(EnvironmentName).tfvars" -out=$(ApplicationName)-$(EnvironmentName).tfplan
+        arguments: plan -out=$(ApplicationName).tfplan
       env: 
-        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-        ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+        ARM_CLIENT_ID: $(kv-infra-client-id)
+        ARM_CLIENT_SECRET: $(kv-infra-client-secret)
+        ARM_TENANT_ID: $(kv-infra-tenant-id)
+        ARM_SUBSCRIPTION_ID: $(kv-infra-sub-id)
         BACKEND_RESOURCE_GROUP_NAME: $(BACKEND_RESOURCE_GROUP_NAME)
         BACKEND_STORAGE_ACCOUNT_NAME: $(BACKEND_STORAGE_ACCOUNT_NAME)
         BACKEND_STORAGE_CONTAINER_NAME: $(BACKEND_STORAGE_CONTAINER_NAME)
-        TF_BACKEND_KEY: $(ApplicationName)-$(EnvironmentName)
+        TF_BACKEND_KEY: $(ApplicationName)
         TF_VAR_application_name: $(ApplicationName)
     - task: PublishPipelineArtifact@1
       inputs: 
-        targetPath: $(System.DefaultWorkingDirectory)/$(WorkingDirectory)/$(ApplicationName)-$(EnvironmentName).tfplan
+        targetPath: $(System.DefaultWorkingDirectory)/$(WorkingDirectory)/$(ApplicationName).tfplan
         artifactName: tfplan
 
 - stage: Apply
@@ -59,7 +59,7 @@ stages:
   - deployment: terraform
     timeoutInMinutes: 0
     environment:
-      name: $(ApplicationName)-$(EnvironmentName)
+      name: $(ApplicationName)
     strategy:
       runOnce:
         deploy:
@@ -77,14 +77,14 @@ stages:
               workingDirectory: $(WorkingDirectory)
               arguments: validate
             env: 
-              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-              ARM_TENANT_ID: $(ARM_TENANT_ID)
-              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+              ARM_CLIENT_ID: $(kv-infra-client-id)
+              ARM_CLIENT_SECRET: $(kv-infra-client-secret)
+              ARM_TENANT_ID: $(kv-infra-tenant-id)
+              ARM_SUBSCRIPTION_ID: $(kv-infra-sub-id)
               BACKEND_RESOURCE_GROUP_NAME: $(BACKEND_RESOURCE_GROUP_NAME)
               BACKEND_STORAGE_ACCOUNT_NAME: $(BACKEND_STORAGE_ACCOUNT_NAME)
               BACKEND_STORAGE_CONTAINER_NAME: $(BACKEND_STORAGE_CONTAINER_NAME)
-              TF_BACKEND_KEY: $(ApplicationName)-$(EnvironmentName)
+              TF_BACKEND_KEY: $(ApplicationName)
               TF_VAR_application_name: $(ApplicationName)
 
           - task: Bash@3
@@ -92,14 +92,14 @@ stages:
             inputs:
               filePath: .azdo-pipelines/scripts/terraform-with-backend.sh
               workingDirectory: $(WorkingDirectory)
-              arguments: apply -auto-approve $(ApplicationName)-$(EnvironmentName).tfplan
+              arguments: apply -auto-approve $(ApplicationName).tfplan
             env: 
-              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-              ARM_TENANT_ID: $(ARM_TENANT_ID)
-              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+              ARM_CLIENT_ID: $(kv-infra-client-id)
+              ARM_CLIENT_SECRET: $(kv-infra-client-secret)
+              ARM_TENANT_ID: $(kv-infra-tenant-id)
+              ARM_SUBSCRIPTION_ID: $(kv-infra-sub-id)
               BACKEND_RESOURCE_GROUP_NAME: $(BACKEND_RESOURCE_GROUP_NAME)
               BACKEND_STORAGE_ACCOUNT_NAME: $(BACKEND_STORAGE_ACCOUNT_NAME)
               BACKEND_STORAGE_CONTAINER_NAME: $(BACKEND_STORAGE_CONTAINER_NAME)
-              TF_BACKEND_KEY: $(ApplicationName)-$(EnvironmentName)
+              TF_BACKEND_KEY: $(ApplicationName)
               TF_VAR_application_name: $(ApplicationName)
