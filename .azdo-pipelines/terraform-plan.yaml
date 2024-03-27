@@ -12,21 +12,21 @@ jobs:
   steps:
 
   - task: Bash@3
-      displayName: "terraform validate"
-      inputs:
-        filePath: .azdo-pipelines/scripts/terraform-with-backend.sh
-        workingDirectory: $(WorkingDirectory)
-        arguments: validate
-      env: 
-        ARM_CLIENT_ID: $(kv-infra-client-id)
-        ARM_CLIENT_SECRET: $(kv-infra-client-secret)
-        ARM_TENANT_ID: $(kv-infra-tenant-id)
-        ARM_SUBSCRIPTION_ID: $(kv-infra-sub-id)
-        BACKEND_RESOURCE_GROUP_NAME: $(BACKEND_RESOURCE_GROUP_NAME)
-        BACKEND_STORAGE_ACCOUNT_NAME: $(BACKEND_STORAGE_ACCOUNT_NAME)
-        BACKEND_STORAGE_CONTAINER_NAME: $(BACKEND_STORAGE_CONTAINER_NAME)
-        TF_BACKEND_KEY: $(ApplicationName)
-        TF_VAR_application_name: $(ApplicationName)
+    displayName: "terraform validate"
+    inputs:
+      filePath: .azdo-pipelines/scripts/terraform-with-backend.sh
+      workingDirectory: $(WorkingDirectory)
+      arguments: validate
+    env: 
+      ARM_CLIENT_ID: $(kv-infra-client-id)
+      ARM_CLIENT_SECRET: $(kv-infra-client-secret)
+      ARM_TENANT_ID: $(kv-infra-tenant-id)
+      ARM_SUBSCRIPTION_ID: $(kv-infra-sub-id)
+      BACKEND_RESOURCE_GROUP_NAME: $(BACKEND_RESOURCE_GROUP_NAME)
+      BACKEND_STORAGE_ACCOUNT_NAME: $(BACKEND_STORAGE_ACCOUNT_NAME)
+      BACKEND_STORAGE_CONTAINER_NAME: $(BACKEND_STORAGE_CONTAINER_NAME)
+      TF_BACKEND_KEY: $(ApplicationName)
+      TF_VAR_application_name: $(ApplicationName)
 
   - task: Bash@3
     displayName: "terraform plan"
